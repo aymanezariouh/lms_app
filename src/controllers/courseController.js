@@ -1,6 +1,6 @@
-import Course from "../models/Course.js";
-import Module from "../models/Module.js";
-import Resource from "../models/Resource.js";
+import Course from "../models/Course.module.js";
+import Module from "../models/Module.module.js";
+import Resource from "../models/Resource.module.js";
 
 // 1. Lister les cours avec filtres et tri
 export const getCourses = async (req, res, next) => {

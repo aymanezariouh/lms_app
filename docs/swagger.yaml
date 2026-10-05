@@ -1,0 +1,97 @@
+openapi: 3.0.0
+info:
+  title: LMS Catalog API
+  version: 1.0.0
+  description: API backend pour la consultation du catalogue de cours, modules et ressources (Sprint 1).
+servers:
+  - url: http://localhost:5000/api
+    description: Serveur de développement local
+
+paths:
+  /health:
+    get:
+      summary: Vérification de l'état de l'API
+      responses:
+        200:
+          description: API opérationnelle
+
+  /courses:
+    get:
+      summary: Liste des cours publiés
+      description: Permet de consulter les cours avec filtrage et tri.
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Filtrer par catégorie (ex. Backend, Database)
+        - in: query
+          name: level
+          schema:
+            type: string
+            enum: [beginner, intermediate, advanced]
+          description: Filtrer par niveau
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Recherche par mot-clé dans le titre
+        - in: query
+          name: sortBy
+          schema:
+            type: string
+            enum: [createdAt, publishedAt]
+          description: Trier par date de création ou de publication
+      responses:
+        200:
+          description: Liste des cours récupérée avec succès
+
+  /courses/{id}:
+    get:
+      summary: Détail d'un cours
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Identifiant MongoDB du cours
+      responses:
+        200:
+          description: Détails du cours
+        404:
+          description: Cours introuvable
+        400:
+          description: Identifiant invalide
+
+  /courses/{id}/modules:
+    get:
+      summary: Liste des modules d'un cours
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Identifiant du cours parent
+      responses:
+        200:
+          description: Liste ordonnée des modules
+        404:
+          description: Cours introuvable
+
+  /courses/modules/{moduleId}/resources:
+    get:
+      summary: Liste des ressources d'un module
+      parameters:
+        - in: path
+          name: moduleId
+          required: true
+          schema:
+            type: string
+          description: Identifiant du module parent
+      responses:
+        200:
+          description: Liste des ressources rattachées
+        404:
+          description: Module introuvable
